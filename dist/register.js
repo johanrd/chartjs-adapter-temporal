@@ -1,6 +1,6 @@
 import {
   src_default
-} from "./chunk-FVCZ6CDU.js";
+} from "./chunk-4SWLPKJV.js";
 
 // src/register.ts
 import { _adapters } from "chart.js";

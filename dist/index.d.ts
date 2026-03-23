@@ -10,7 +10,7 @@ interface FormatContext {
 }
 type FormatValue = string | Intl.DateTimeFormatOptions | ((timestamp: number, context: FormatContext) => string);
 declare module 'chart.js' {
-    interface DateAdapter<T> {
+    interface DateAdapter<T extends Record<string, any> = Record<string, any>> {
         format(this: DateAdapter<T>, timestamp: number, format: FormatValue): string;
     }
 }
