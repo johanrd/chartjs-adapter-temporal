@@ -80,7 +80,8 @@ var adapter = {
   formats() {
     return FORMATS;
   },
-  format(timestamp, format) {
+  format(timestamp, _format) {
+    const format = _format;
     const timeZone = getTimeZone(this.options);
     if (typeof format === "function") {
       return format(timestamp, { locale: this.options.locale, timeZone });

@@ -9,11 +9,6 @@ interface FormatContext {
     timeZone: string;
 }
 type FormatValue = string | Intl.DateTimeFormatOptions | ((timestamp: number, context: FormatContext) => string);
-declare module 'chart.js' {
-    interface DateAdapter<T extends Record<string, any> = Record<string, any>> {
-        format(this: DateAdapter<T>, timestamp: number, format: FormatValue): string;
-    }
-}
 declare const adapter: DateAdapter<AdapterOptions>;
 
 export { type AdapterOptions, type FormatContext, type FormatValue, adapter as default };
