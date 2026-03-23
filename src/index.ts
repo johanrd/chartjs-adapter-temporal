@@ -82,7 +82,8 @@ const adapter: DateAdapter<AdapterOptions> = {
     return FORMATS;
   },
 
-  format(timestamp, format) {
+  format(timestamp, _format) {
+    const format = _format as FormatValue;
     const timeZone = getTimeZone(this.options);
 
     if (typeof format === 'function') {
