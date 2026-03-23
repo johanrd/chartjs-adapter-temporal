@@ -5,6 +5,22 @@ export interface AdapterOptions {
   timeZone?: string;
 }
 
+export interface FormatContext {
+  locale?: string;
+  timeZone: string;
+}
+
+export type FormatValue =
+  | string
+  | Intl.DateTimeFormatOptions
+  | ((timestamp: number, context: FormatContext) => string);
+
+declare module 'chart.js' {
+  interface DateAdapter<T> {
+    format(this: DateAdapter<T>, timestamp: number, format: FormatValue): string;
+  }
+}
+
 const FORMAT_OPTIONS: Record<
   string,
   Intl.DateTimeFormatOptions & { fractionalSecondDigits?: number }
@@ -75,6 +91,25 @@ const adapter: DateAdapter<AdapterOptions> = {
   format(timestamp, format) {
     const timeZone = getTimeZone(this.options);
 
+    // Callback function
+    if (typeof format === 'function') {
+      return format(timestamp, { locale: this.options.locale, timeZone });
+    }
+
+    // Intl.DateTimeFormatOptions object
+    if (format !== null && typeof format === 'object') {
+      const key = `${this.options.locale}:${timeZone}:${JSON.stringify(format)}`;
+      let formatter = cache.get(key);
+
+      if (!formatter) {
+        formatter = new Intl.DateTimeFormat(this.options.locale, { ...format, timeZone });
+        cache.set(key, formatter);
+      }
+
+      return formatter.format(timestamp);
+    }
+
+    // String key (built-in preset)
     if (format === FORMATS.quarter) {
       const q =
         Math.floor(
