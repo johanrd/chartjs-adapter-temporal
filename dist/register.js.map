@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/register.ts"],"sourcesContent":["import { _adapters } from 'chart.js';\nimport adapter from './';\n\n_adapters._date.override(adapter);\n"],"mappings":";;;;;AAAA,SAAS,iBAAiB;AAG1B,UAAU,MAAM,SAAS,WAAO;","names":[]}

@@ -16,7 +16,7 @@ export type FormatValue =
   | ((timestamp: number, context: FormatContext) => string);
 
 declare module 'chart.js' {
-  interface DateAdapter<T> {
+  interface DateAdapter<T extends Record<string, any> = Record<string, any>> {
     format(this: DateAdapter<T>, timestamp: number, format: FormatValue): string;
   }
 }
@@ -91,25 +91,10 @@ const adapter: DateAdapter<AdapterOptions> = {
   format(timestamp, format) {
     const timeZone = getTimeZone(this.options);
 
-    // Callback function
     if (typeof format === 'function') {
       return format(timestamp, { locale: this.options.locale, timeZone });
     }
 
-    // Intl.DateTimeFormatOptions object
-    if (format !== null && typeof format === 'object') {
-      const key = `${this.options.locale}:${timeZone}:${JSON.stringify(format)}`;
-      let formatter = cache.get(key);
-
-      if (!formatter) {
-        formatter = new Intl.DateTimeFormat(this.options.locale, { ...format, timeZone });
-        cache.set(key, formatter);
-      }
-
-      return formatter.format(timestamp);
-    }
-
-    // String key (built-in preset)
     if (format === FORMATS.quarter) {
       const q =
         Math.floor(
@@ -118,14 +103,12 @@ const adapter: DateAdapter<AdapterOptions> = {
       return `Q${q} - ${this.format(timestamp, FORMATS.year as any)}`;
     }
 
-    const key = `${this.options.locale}:${timeZone}:${format}`;
+    const options = typeof format === 'string' ? FORMAT_OPTIONS[format] : format;
+    const key = `${this.options.locale}:${timeZone}:${typeof format === 'string' ? format : JSON.stringify(format)}`;
     let formatter = cache.get(key);
 
     if (!formatter) {
-      formatter = new Intl.DateTimeFormat(this.options.locale, {
-        ...FORMAT_OPTIONS[format],
-        timeZone,
-      });
+      formatter = new Intl.DateTimeFormat(this.options.locale, { ...options, timeZone });
       cache.set(key, formatter);
     }
 
