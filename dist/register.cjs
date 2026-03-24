@@ -163,4 +163,12 @@ function startOf(_ts, unit, options) {
 
 // src/register.ts
 import_chart2._adapters._date.override(src_default);
+import_chart2.defaults.set("scales.time", {
+  time: {
+    displayFormats: {
+      _scriptable: false,
+      _indexable: false
+    }
+  }
+});
 //# sourceMappingURL=register.cjs.map
