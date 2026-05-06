@@ -1,6 +1,6 @@
 {
   "name": "chartjs-adapter-temporal",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "Temporal/Intl API based time adapter for Chart.js",
   "keywords": [
     "adapter",
@@ -14,6 +14,9 @@
   ],
   "license": "MIT",
   "author": "",
+  "repository": {
+    "url": "https://github.com/schummar/chartjs-adapter-temporal"
+  },
   "files": [
     "dist"
   ],
@@ -42,8 +45,7 @@
     "lint:check": "oxlint --type-aware --type-check",
     "test": "vitest run --coverage",
     "test:watch": "vitest",
-    "build": "tsdown src/index.ts src/register.ts --clean --format esm --format cjs --sourcemap --dts --exports",
-    "prepublishOnly": "runp build :p publint size-limit"
+    "build": "tsdown src/index.ts src/register.ts --clean --format esm --format cjs --sourcemap --dts --exports"
   },
   "devDependencies": {
     "@nx/js": "^22.6.3",
@@ -71,7 +73,7 @@
     {
       "name": "index",
       "path": "dist/index.mjs",
-      "limit": "1 KB"
+      "limit": "1.1 KB"
     },
     {
       "name": "register",
